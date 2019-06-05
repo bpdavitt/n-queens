@@ -105,7 +105,14 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      // let column = this.attributes[colIndex] 
+      let count = 0;
+      for (let i = 0; i < this.attributes.n; i++){
+        if(this.attributes[i][colIndex] === 1) {
+          count ++;
+        }
+      }
+      return count > 1;      
     },
 
     // test if any columns on this board contain conflicts
