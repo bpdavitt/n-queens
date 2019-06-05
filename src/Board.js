@@ -82,8 +82,10 @@
       if (rowIndex === 'n') {
         return undefined;
       };
+
       let row = this.attributes[rowIndex];
-      return row.indexOf(1) !== row.lastIndexOf(1);
+      let result = row.filter(index => index === 1)
+      return result.length > 1;
     },
 
     // test if any rows on this board contain conflicts
@@ -117,7 +119,14 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+    
+      for (let i = 0; i < this.attributes.n; i++){
+        if(this.hasColConflictAt(i)){
+          return true;
+        }
+      }
+
+      return false;
     },
 
 
