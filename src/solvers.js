@@ -99,9 +99,47 @@ window.findNQueensSolution = function(n) {
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
-window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+window.countNQueensSolutions = function(n, board, usedCol, row, solutions = []) {
+  if ( n === 0 || n === 1 ) {
+    return 1;
+  }
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  board = board || new Board({n: n});
+
+  usedCol = usedCol || [];
+
+  row = row || 0;
+
+  for ( var i = 0; i <= n - 1; i++) {
+    
+    if (!usedCol.includes(i)) {
+      board.togglePiece(row, i);
+
+      if (row === n - 1) {
+        
+        if (!board.hasAnyQueensConflicts(row, i)) {
+          var validBoard = board.rows();
+          let constBoard = validBoard.slice(0);
+          solutions.push(constBoard);
+        }
+
+        board.togglePiece(row, i);
+        
+        return solutions;
+      }
+
+      if (!board.hasAnyQueensConflicts(row, i)) {
+        usedCol.push(i);
+        countNQueensSolutions(n, board, usedCol, row + 1, solutions);
+        usedCol.pop();
+      }      
+      board.togglePiece(row, i);                
+    }
+    if (i === n - 1 && row !== 0) {
+      return solutions;
+    }    
+  }
+
+  console.log('Number of solutions for ' + n + ' queens:', solutions.length);
+  return solutions.length;
 };

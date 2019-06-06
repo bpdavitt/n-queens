@@ -198,7 +198,7 @@
       let n = this.attributes.n;
       if (n === 1) { return false; }
       if (n === 2) {
-        return hasMinorDiagonalConflictAt(1);
+        return this.hasMinorDiagonalConflictAt(1);
       }
       for (let i = 1; i <= (n * 2) - 3; i++) {
         if (this.hasMinorDiagonalConflictAt(i)) {
