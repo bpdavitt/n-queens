@@ -119,7 +119,10 @@ window.countNQueensSolutions = function(n, board, usedCol, row, solutions = []) 
         
         if (!board.hasAnyQueensConflicts(row, i)) {
           var validBoard = board.rows();
-          let constBoard = validBoard.slice(0);
+          let constBoard = [];
+          validBoard.forEach((row, index) => {
+            constBoard[index] = [...row];
+          });
           solutions.push(constBoard);
         }
 
