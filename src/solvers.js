@@ -59,28 +59,26 @@ window.countNRooksSolutions = function(n, board, usedCol, row, solutions = []) {
   for ( var i = 0; i <= n - 1; i++) {
     
     if (!usedCol.includes(i)) {
+      //Column i available to legally place a piece. Toggle piece, then follow logic for base case or others
       board.togglePiece(row, i);
 
-      if (row === n - 1) {
-        
-        if (!board.hasAnyRooksConflicts()) {
-          var validBoard = board.rows();
-          let constBoard = validBoard.slice(0);
-          solutions.push(constBoard);
-        }
-
-        board.togglePiece(row, i);
-        
+      //base Case if at final row
+      if (row === n - 1) {              
+        var validBoard = board.rows();
+        let constBoard = validBoard.slice(0);
+        solutions.push(constBoard);        
+        board.togglePiece(row, i);        
         return solutions;
       }
-
-      if (!board.hasAnyRooksConflicts()) {
-        usedCol.push(i);
-        countNRooksSolutions(n, board, usedCol, row + 1, solutions);
-        usedCol.pop();
-      }      
+      // Not in base case; add column to used column array. Continue recursion, when recursion returns back to this row
+      // will pop i from used column array and toggle piece off
+      usedCol.push(i);
+      countNRooksSolutions(n, board, usedCol, row + 1, solutions);
+      usedCol.pop();           
       board.togglePiece(row, i);                
     }
+
+    //base case if at final columnn
     if (i === n - 1 && row !== 0) {
       return solutions;
     }    
@@ -118,7 +116,8 @@ window.findNQueensSolution = function(n, board, usedCol, row, solutions = []) {
 
       if (row === n - 1) {
         
-        if (!board.hasAnyQueensConflicts(row, i)) {
+        if (!board.hasMajorDiagonalConflictAt(board._getFirstRowColumnIndexForMajorDiagonalOn(row,i)) && 
+            !board.hasMinorDiagonalConflictAt(board._getFirstRowColumnIndexForMinorDiagonalOn(row,i))) {
           var validBoard = board.rows();
           let constBoard = [];
           validBoard.forEach((row, index) => {
@@ -132,7 +131,8 @@ window.findNQueensSolution = function(n, board, usedCol, row, solutions = []) {
         return solutions;
       }
 
-      if (!board.hasAnyQueensConflicts(row, i)) {
+      if (!board.hasMajorDiagonalConflictAt(board._getFirstRowColumnIndexForMajorDiagonalOn(row,i)) && 
+          !board.hasMinorDiagonalConflictAt(board._getFirstRowColumnIndexForMinorDiagonalOn(row,i))) {
         usedCol.push(i);
         countNQueensSolutions(n, board, usedCol, row + 1, solutions);
         usedCol.pop();
